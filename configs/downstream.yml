@@ -10,8 +10,7 @@ Configuratron:
   deep1010:
     return_mask: False
 
-encoder_weights: <saved encoder weights>
-context_weights: <saved transformer weights>
+encoder_weights: C:\Users\chedl\OneDrive\Bureau\EMSE\3A\PE\encoder.pt
+context_weights: C:\Users\chedl\OneDrive\Bureau\EMSE\3A\PE\contextualizer.pt
 
 datasets: !include configs/downstream_datasets.yml
-
