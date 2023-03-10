@@ -1,0 +1,18 @@
+Configuratron:
+
+use_gpu: False
+
+datasets:
+  privateEEG:
+    name: "private Dataset"
+    toplevel: C:\Users\chedl\OneDrive\Bureau\EMSE\3A\PE\essai
+    tmin: -2
+    tlen: 6
+    data_max: 100
+    data_min: -100
+    extensions:
+      - .raw.fif
+    train_params:
+      epochs: 3
+      batch_size: 60
+    lr: 0.00005

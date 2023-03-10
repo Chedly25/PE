@@ -2,19 +2,8 @@
 # The *first* metric will be used to generate plots.
 # Specify the chance level of the metric as associated value, if not specified, assumed to be 0.5
 
-mmidb:
-  - bac
-
 bci_iv_2a:
   - Accuracy: 0.25
 
-ern:
-  - auroc
-
-erpbci:
-  - auroc
-
-sleep-edf:
-  - bac: 0.2
 
 
