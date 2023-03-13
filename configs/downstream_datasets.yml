@@ -22,5 +22,18 @@ bci_iv_2a:
   lr: 0.00001
   folds: 5
   #toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/study5"
+privateEEG:
+  name: "EEG MAHNOB"
+  toplevel: C:\Users\chedl\OneDrive\Bureau\EMSE\3A\PE\essai
+  tmin: -2
+  tlen: 6
+  data_max: 100
+  data_min: -100
+  extensions:
+    - .raw.fif
+  train_params:
+    epochs: 3
+    batch_size: 60
+    lr: 0.00005
 
 

@@ -16,8 +16,8 @@ from dn3_ext import BENDRClassification, LinearHeadBENDR
 
 # Since we are doing a lot of loading, this is nice to suppress some tedious information
 import mne
-mne.set_log_level(False)
 
+mne.set_log_level(False)
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Fine-tunes BENDER models.")
@@ -58,13 +58,13 @@ if __name__ == '__main__':
 
             # Fit everything
             process.fit(training_dataset=training, validation_dataset=validation, warmup_frac=0.1,
-                        retain_best=retain_best, pin_memory=False, **ds.train_params)
+                        retain_best=retain_best, pin_memory=False)
 
             if args.results_filename:
                 if isinstance(test, Thinker):
                     results.add_results_thinker(process, ds_name, test)
                 else:
-                    results.add_results_all_thinkers(process, ds_name, test, Fold=fold+1)
+                    results.add_results_all_thinkers(process, ds_name, test, Fold=fold + 1)
                 results.to_spreadsheet(args.results_filename)
 
             # explicitly garbage collect here, don't want to fit two models in GPU at once
