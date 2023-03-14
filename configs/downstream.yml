@@ -1,6 +1,6 @@
 Configuratron:
   use_only:
-    - privateEEG
+    - ssc
   preload: True
   sfreq: 256
   deep1010:

@@ -4,11 +4,11 @@ import yaml
 from dn3.metrics.base import balanced_accuracy, auroc
 from dn3.transforms.instance import To1020
 
-from dn3_ext import LoaderERPBCI, LinearHeadBENDR, BENDRClassification
+from dn3_ext import LoaderERPBCI, LoaderprivateEEG, LinearHeadBENDR, BENDRClassification
 
 
 CUSTOM_LOADERS = dict(
-    erpbci=LoaderERPBCI,
+    privateEEG = LoaderprivateEEG,
 )
 
 EXTRA_METRICS = dict(bac=balanced_accuracy,

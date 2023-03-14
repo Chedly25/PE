@@ -106,9 +106,9 @@ class BENDRClassification(Classifier):
         mask_t_span = mask_t_span if mask_t_span > 1 else int(mask_t_span * encoded_samples)
         mask_c_span = mask_c_span if mask_c_span > 1 else int(mask_c_span * encoder_h)
         contextualizer = BENDRContextualizer(encoder_h, hidden_feedforward=contextualizer_hidden, finetuning=True,
-                                                  mask_p_t=mask_p_t, mask_p_c=mask_p_c, layer_drop=layer_drop,
-                                                  mask_c_span=mask_c_span, dropout=dropout,
-                                                  mask_t_span=mask_t_span)
+                                             mask_p_t=mask_p_t, mask_p_c=mask_p_c, layer_drop=layer_drop,
+                                             mask_c_span=mask_c_span, dropout=dropout,
+                                             mask_t_span=mask_t_span)
 
         self.encoder = nn.DataParallel(encoder) if multi_gpu else encoder
         self.contextualizer = nn.DataParallel(contextualizer) if multi_gpu else contextualizer
@@ -233,6 +233,7 @@ class BendingCollegeWav2Vec(BaseProcess):
     """
     A more wav2vec 2.0 style of constrastive self-supervision, more inspired-by than exactly like it.
     """
+
     def __init__(self, encoder, context_fn, mask_rate=0.1, mask_span=6, learning_rate=0.01, temp=0.5,
                  permuted_encodings=False, permuted_contexts=False, enc_feat_l2=0.001, multi_gpu=False,
                  l2_weight_decay=1e-4, unmasked_negative_frac=0.25, encoder_grad_frac=1.0,
@@ -274,7 +275,7 @@ class BendingCollegeWav2Vec(BaseProcess):
         z_k = z.permute([0, 2, 1]).reshape(-1, feat)
         with torch.no_grad():
             # candidates = torch.arange(full_len).unsqueeze(-1).expand(-1, self.num_negatives).flatten()
-            negative_inds = torch.randint(0, full_len-1, size=(batch_size, full_len * self.num_negatives))
+            negative_inds = torch.randint(0, full_len - 1, size=(batch_size, full_len * self.num_negatives))
             # From wav2vec 2.0 implementation, I don't understand
             # negative_inds[negative_inds >= candidates] += 1
 
@@ -316,7 +317,7 @@ class BendingCollegeWav2Vec(BaseProcess):
             if samples <= self.mask_span * half_avg_num_seeds:
                 raise ValueError("Masking the entire span, pointless.")
             mask[:, _make_span_from_seeds((samples // half_avg_num_seeds) * np.arange(half_avg_num_seeds).astype(int),
-                                              self.mask_span)] = True
+                                          self.mask_span)] = True
 
         c = self.context_fn(z, mask)
 
@@ -345,7 +346,7 @@ class BendingCollegeWav2Vec(BaseProcess):
 
 
 class _BENDREncoder(nn.Module):
-    def __init__(self, in_features, encoder_h=256,):
+    def __init__(self, in_features, encoder_h=256, ):
         super().__init__()
         self.in_features = in_features
         self.encoder_h = encoder_h
@@ -374,7 +375,7 @@ class ConvEncoderBENDR(_BENDREncoder):
         assert len(enc_downsample) == len(enc_width)
 
         # Centerable convolutions make life simpler
-        enc_width = [e if e % 2 else e+1 for e in enc_width]
+        enc_width = [e if e % 2 else e + 1 for e in enc_width]
         self._downsampling = enc_downsample
         self._width = enc_width
 
@@ -391,7 +392,7 @@ class ConvEncoderBENDR(_BENDREncoder):
         if projection_head:
             self.encoder.add_module("projection-1", nn.Sequential(
                 nn.Conv1d(in_features, in_features, 1),
-                nn.Dropout2d(dropout*2),
+                nn.Dropout2d(dropout * 2),
                 nn.GroupNorm(in_features // 2, in_features),
                 nn.GELU()
             ))
@@ -479,6 +480,7 @@ class EncodingAugment(nn.Module):
 
 class _Hax(nn.Module):
     """T-fixup assumes self-attention norms are removed"""
+
     def __init__(self):
         super().__init__()
 
@@ -515,7 +517,7 @@ class BENDRContextualizer(nn.Module):
         self.finetuning = finetuning
 
         # Initialize replacement vector with 0's
-        self.mask_replacement = torch.nn.Parameter(torch.normal(0, in_features**(-0.5), size=(in_features,)),
+        self.mask_replacement = torch.nn.Parameter(torch.normal(0, in_features ** (-0.5), size=(in_features,)),
                                                    requires_grad=True)
 
         self.position_encoder = position_encoder > 0
@@ -571,7 +573,8 @@ class BENDRContextualizer(nn.Module):
         x = self.input_conditioning(x)
 
         if self.start_token is not None:
-            in_token = self.start_token * torch.ones((1, 1, 1), requires_grad=True).to(x.device).expand([-1, *x.shape[1:]])
+            in_token = self.start_token * torch.ones((1, 1, 1), requires_grad=True).to(x.device).expand(
+                [-1, *x.shape[1:]])
             x = torch.cat([in_token, x], dim=0)
 
         for layer in self.transformer_layers:
@@ -637,4 +640,25 @@ class LoaderERPBCI:
         target_letter = cls._get_target_and_crop(run)
         events, occurrences = mne.events_from_annotations(run, lambda a: int(target_letter in a) + 1)
         run.add_events(events, stim_channel=cls.STIM_CHANNEL)
+        return run
+
+
+class LoaderprivateEEG:
+    """
+    The dataset from https://physionet.org/content/erpbci/1.0.0/ required a customized solution.
+
+    I've put it in an object so that the solution is somewhat self-contained.
+    """
+    STIM_CHANNEL = None
+    @staticmethod
+    def _get_target_and_crop(raw):
+        # Operates in-place
+        raw.crop(tmin=0, tmax=None, include_tmax=False)
+
+    @classmethod
+    def __call__(cls, path: Path):
+        # Data has to be preloaded to add events to it, swap edf for fif if haven't offline processed first
+        # run = mne.io.read_raw_edf(str(path), preload=True)
+        run = mne.io.read_raw_fif(str(path), preload=True)
+        cls._get_target_and_crop(run)
         return run
