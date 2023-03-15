@@ -1,6 +1,6 @@
 Configuratron:
   use_only:
-    - mahnob
+    - sleep-edf
   preload: False
   sfreq: 256
   deep1010:
