@@ -643,22 +643,10 @@ class LoaderERPBCI:
         return run
 
 
-class LoaderprivateEEG:
-    """
-    The dataset from https://physionet.org/content/erpbci/1.0.0/ required a customized solution.
-
-    I've put it in an object so that the solution is somewhat self-contained.
-    """
-    STIM_CHANNEL = None
-    @staticmethod
-    def _get_target_and_crop(raw):
-        # Operates in-place
-        raw.crop(tmin=0, tmax=None, include_tmax=False)
+class LoaderMAHNOB:
 
     @classmethod
     def __call__(cls, path: Path):
-        # Data has to be preloaded to add events to it, swap edf for fif if haven't offline processed first
-        # run = mne.io.read_raw_edf(str(path), preload=True)
-        run = mne.io.read_raw_fif(str(path), preload=True)
-        cls._get_target_and_crop(run)
+        # Data has to be preloaded to add events to it
+        run = mne.io.read_raw_edf(str(path), stim_channel=None)
         return run

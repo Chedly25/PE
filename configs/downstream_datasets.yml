@@ -23,30 +23,54 @@ mmidb:
   folds: 5
   #toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/study5"
 
-privateEEG:
+mahnob:
   name: "EEG MAHNOB"
   toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/essai"
-  stim_channel: None
   tmin: -2
   tlen: 6
-  events: []
   extensions:
-    - raw.fif
+    - .edf
   train_params:
     epochs: 3
     batch_size: 60
     lr: 0.00005
 
-ssc:
-  name: "SSC"
+sleep-edf:
+  name: "Sleep EDFx Cassette"
+  filename_format: "SC4{subject:2}{session:1}"
+  annotation_format: "SC4{subject:2}{session:1}*Hypnogram*"
   toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/SSC/sleep-cassette"
-  tmin: -2
-  tlen: 6
+  tmin: 0
+  tlen: 30
+  data_max: 4460.6
+  data_min: -4465.7
   extensions:
-    - raw.fif
+    - .edf
+  chunk_duration: 30
+  events:
+    'Sleep stage W': 0
+    'Sleep stage 1': 1
+    'Sleep stage 2': 2
+    'Sleep stage 3': 3
+    'Sleep stage 4': 3
+    'Sleep stage R': 4
+  rename_channels:
+    FPZ: 'EEG Fpz-Cz'
+    PZ: 'EEG Pz-Oz'
+    HEOGL: "EOG horizontal"
+  picks:
+    - eeg
+  exclude_channels:
+    - "Resp oro-nasal"
+    - 'EMG submental'
+    - 'Temp rectal' # Comfiest sleep ever
+    - 'Event marker'
   train_params:
-    epochs: 3
-    batch_size: 60
-    lr: 0.00005
+    epochs: 40
+    batch_size: 80
+    balance_method: undersample
+    validation_interval: 1000
+  lr: 0.00005
+  folds: 10
 
 

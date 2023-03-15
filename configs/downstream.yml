@@ -1,7 +1,7 @@
 Configuratron:
   use_only:
-    - ssc
-  preload: True
+    - mahnob
+  preload: False
   sfreq: 256
   deep1010:
     return_mask: False
