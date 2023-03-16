@@ -606,7 +606,7 @@ class LoaderERPBCI:
     MAX_ACCEPTABLE_FLASHES = 144
     SOA = 0.15
     TOTAL_RUN_TIME_S = int(MAX_ACCEPTABLE_FLASHES * SOA)
-    STIM_CHANNEL = 'STI 014'
+    STIM_CHANNEL_pasouf = 'STI 014'
 
     @staticmethod
     def _get_target_and_crop(raw):
@@ -645,8 +645,27 @@ class LoaderERPBCI:
 
 class LoaderMAHNOB:
 
+    STIM_CHANNEL = 'STI'
+
+    @staticmethod
+    def _make_blank_stim(raw):
+        info = mne.create_info([LoaderMAHNOB.STIM_CHANNEL], raw.info['sfreq'], ['stim'])
+        stim_raw = mne.io.RawArray(np.zeros((1, len(raw.times))), info)
+        stim_data = stim_raw.get_data()[0]
+        print(stim_data)
+        raw.add_channels([stim_raw], force_update_info=True)
+
     @classmethod
     def __call__(cls, path: Path):
         # Data has to be preloaded to add events to it
-        run = mne.io.read_raw_edf(str(path), stim_channel=None)
+        run = mne.io.read_raw_edf(str(path), preload=True)
+        print("YOUHOUUU")
+        if len(run.annotations) == 0:
+            raise DN3ConfigException
+        cls._make_blank_stim(run)
+        print("YOUHOUUU1")
+        events, occurrences = mne.events_from_annotations(run)
+        print(run.info['ch_names'])
+        run.add_events(events, stim_channel=cls.STIM_CHANNEL)
+        print("YOUHOUUU3")
         return run
