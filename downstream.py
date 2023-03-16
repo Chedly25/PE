@@ -23,8 +23,8 @@ mne.set_log_level(False)
 
 if __name__ == '__main__':
     try:
-
         parser = argparse.ArgumentParser(description="Fine-tunes BENDER models.")
+        parser.add_argument('-data', choices=utils.CUSTOM_LOADERS)
         parser.add_argument('model', choices=utils.MODEL_CHOICES)
         parser.add_argument('--ds-config', default="configs/downstream.yml", help="The DN3 config file to use.")
         parser.add_argument('--metrics-config', default="configs/metrics.yml", help="Where the listings for config "
@@ -40,15 +40,16 @@ if __name__ == '__main__':
                                                                      'final results.')
         args = parser.parse_args()
         experiment = ExperimentConfig(args.ds_config)
+        print(args.data)
         if args.results_filename:
             results = ThinkerwiseResultTracker()
         for ds_name, ds in tqdm.tqdm(experiment.datasets.items(), total=len(experiment.datasets.items()), desc='Datasets'):
             added_metrics, retain_best, _ = utils.get_ds_added_metrics(ds_name, args.metrics_config)
-            print('yy')
-            print(ds_name)
-            print(ds)
-            dataset = utils.get_ds(ds_name, ds)
-            print('tt')
+            #print('yy')
+            #print(ds_name)
+            #print(ds)
+            #dataset = utils.get_ds(ds_name, ds)
+            #print('tt')
             for fold, (training, validation, test) in enumerate(tqdm.tqdm(utils.get_lmoso_iterator(ds_name, ds))):
                 tqdm.tqdm.write(torch.cuda.memory_summary())
 
