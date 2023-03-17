@@ -4,10 +4,11 @@ import yaml
 from dn3.metrics.base import balanced_accuracy, auroc
 from dn3.transforms.instance import To1020
 
-from dn3_ext import LoaderMAHNOB, LinearHeadBENDR, BENDRClassification
+from dn3_ext import LoaderMAHNOB, LoaderERPBCI, LinearHeadBENDR, BENDRClassification
 
 CUSTOM_LOADERS = dict(
     mahnob=LoaderMAHNOB,
+    erpbci=LoaderERPBCI
 )
 
 EXTRA_METRICS = dict(bac=balanced_accuracy,
@@ -52,7 +53,7 @@ def get_ds(name, ds):
     if name in CUSTOM_LOADERS:
         print("JE RENTRE")
         ds.add_custom_raw_loader(CUSTOM_LOADERS[name]())
-
+    print(ds.events)
     dataset = ds.auto_construct_dataset()
     print("JE SUIS PASSEEEEEE")
     dataset.add_transform(To1020())

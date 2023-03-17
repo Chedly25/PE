@@ -26,14 +26,13 @@ mmidb:
 mahnob:
   name: "EEG MAHNOB"
   toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/essai"
-  tmin: -2
   tlen: 6
-  extensions:
-    - .edf
+  events:
+    - 1
   train_params:
     epochs: 3
     batch_size: 60
-    lr: 0.00005
+  lr: 0.00005
 
 bouli:
   name: "bibou"
@@ -54,8 +53,8 @@ sleep-edf:
   toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/SSC/sleep-cassette"
   tmin: 0
   tlen: 30
-  data_max: 4460.6
-  data_min: -4465.7
+  data_max: 0.001
+  data_min: -0.001
   extensions:
     - .edf
   chunk_duration: 30
@@ -84,5 +83,35 @@ sleep-edf:
     validation_interval: 1000
   lr: 0.00005
   folds: 10
+
+erpbci:
+  data_max: 0.00631
+  data_min: -0.00283
+  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/erp"
+  tmin: -0.1
+  tlen: 0.7
+  # We low-passed offline using this parameter just so it didn't happen over and over.
+  # Uncommenting this and part of LoaderERPBCI in dn3_ext.py should reproduce the same results (it says where)
+  lpf: 120
+  extensions:
+  # Swap the following for using default dataset
+    - .edf
+#    - .fif
+  picks:
+    - eeg
+  events:
+    - 1
+    - 2
+  exclude_people:
+    - s08
+    - s12
+    - s10
+    # This stronge person shouldn't affect anyone else, if it does just comment them out
+    - BENDR
+  train_params:
+    epochs: 20
+    batch_size: 64
+    balance_method: undersample
+  lr: 0.00001
 
 

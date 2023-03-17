@@ -48,8 +48,8 @@ if __name__ == '__main__':
             added_metrics, retain_best, _ = utils.get_ds_added_metrics(ds_name, args.metrics_config)
             # print('yy')
             print(ds_name)
-            # print(ds)
-            dataset = utils.get_ds(ds_name, ds)
+            print(ds)
+            #dataset = utils.get_ds(ds_name, ds)
             print('tt')
             for fold, (training, validation, test) in enumerate(tqdm.tqdm(utils.get_lmoso_iterator(ds_name, ds))):
                 tqdm.tqdm.write(torch.cuda.memory_summary())

@@ -625,7 +625,7 @@ class LoaderERPBCI:
 
     @staticmethod
     def _make_blank_stim(raw):
-        info = mne.create_info([LoaderERPBCI.STIM_CHANNEL], raw.info['sfreq'], ['stim'])
+        info = mne.create_info([LoaderERPBCI.STIM_CHANNEL_pasouf], raw.info['sfreq'], ['stim'])
         stim_raw = mne.io.RawArray(np.zeros((1, len(raw.times))), info)
         raw.add_channels([stim_raw], force_update_info=True)
 
@@ -633,26 +633,28 @@ class LoaderERPBCI:
     def __call__(cls, path: Path):
         # Data has to be preloaded to add events to it, swap edf for fif if haven't offline processed first
         # run = mne.io.read_raw_edf(str(path), preload=True)
-        run = mne.io.read_raw_fif(str(path), preload=True)
+        run = mne.io.read_raw_edf(str(path), preload=True)
         if len(run.annotations) == 0:
             raise DN3ConfigException
+        #print("OMGGGGG")
+        #print(run.annotations)
         cls._make_blank_stim(run)
         target_letter = cls._get_target_and_crop(run)
         events, occurrences = mne.events_from_annotations(run, lambda a: int(target_letter in a) + 1)
-        run.add_events(events, stim_channel=cls.STIM_CHANNEL)
+        run.add_events(events, stim_channel=cls.STIM_CHANNEL_pasouf)
+        print(events)
         return run
 
 
 class LoaderMAHNOB:
 
-    STIM_CHANNEL = 'STI'
+    STIM_CHANNEL = 'STI 014'
 
     @staticmethod
     def _make_blank_stim(raw):
         info = mne.create_info([LoaderMAHNOB.STIM_CHANNEL], raw.info['sfreq'], ['stim'])
         stim_raw = mne.io.RawArray(np.zeros((1, len(raw.times))), info)
         stim_data = stim_raw.get_data()[0]
-        print(stim_data)
         raw.add_channels([stim_raw], force_update_info=True)
 
     @classmethod
@@ -664,8 +666,8 @@ class LoaderMAHNOB:
             raise DN3ConfigException
         cls._make_blank_stim(run)
         print("YOUHOUUU1")
+        print(run.annotations)
         events, occurrences = mne.events_from_annotations(run)
-        print(run.info['ch_names'])
         run.add_events(events, stim_channel=cls.STIM_CHANNEL)
-        print("YOUHOUUU3")
+        print(events)
         return run
