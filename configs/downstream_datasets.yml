@@ -23,9 +23,9 @@ mmidb:
   folds: 5
   #toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/study5"
 
-mahnob:
+mahnob_eeg:
   name: "EEG MAHNOB"
-  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/essai"
+  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/mahnob_eeg"
   tlen: 6
   events:
     - 1

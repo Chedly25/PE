@@ -1,6 +1,6 @@
 Configuratron:
   use_only:
-    - mahnob
+    - mahnob_eeg
   preload: False
   sfreq: 256
   deep1010:
