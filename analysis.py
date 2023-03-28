@@ -100,7 +100,7 @@ def compile_performances_from_directory(directory):
     directory = Path(directory)
     dfs = list()
     print("Searching through:", directory)
-    for spreadsheet in directory.glob('*.xlsx'):
+    for spreadsheet in directory.glob('*.xls'):
         print("Reading:", spreadsheet)
         dfs.append(xlsx_to_df(spreadsheet))
     return pd.concat(dfs, ignore_index=True)
@@ -132,16 +132,16 @@ if __name__ == '__main__':
     subparsers = parser.add_subparsers()
 
     downstream_parser = subparsers.add_parser('downstream', help='Plot all the downstream results from a directory.')
-    downstream_parser.add_argument('directory', help="Directory containing '.xlsx' files with performance results.")
+    downstream_parser.add_argument('directory', help="Directory containing '.xls' files with performance results.")
     downstream_parser.set_defaults(func=downstream_plot)
 
     sequence_parser = subparsers.add_parser('sequences', help='Plot the sequence likelihoods.')
-    sequence_parser.add_argument('--filename', default='seq_results.xlsx', help='The name of the sequence results '
+    sequence_parser.add_argument('--filename', default='seq_results.xls', help='The name of the sequence results '
                                                                                 'file.')
     sequence_parser.set_defaults(func=sequence_likelihood_plot)
 
     regression_parser = subparsers.add_parser('regression', help='Plot the sequence likelihoods.')
-    regression_parser.add_argument('--filename', default='seq-regression.xlsx', help='The name of the sequence results '
+    regression_parser.add_argument('--filename', default='seq-regression.xls', help='The name of the sequence results '
                                                                                      'file.')
     regression_parser.set_defaults(func=sequence_regression_plot)
 

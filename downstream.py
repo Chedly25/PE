@@ -52,13 +52,21 @@ if __name__ == '__main__':
             #dataset = utils.get_ds(ds_name, ds)
             print('tt')
             for fold, (training, validation, test) in enumerate(tqdm.tqdm(utils.get_lmoso_iterator(ds_name, ds))):
-                tqdm.tqdm.write(torch.cuda.memory_summary())
+                #tqdm.tqdm.write(torch.cuda.memory_summary())
+                #dummy_tensor = torch.tensor([1, 0, 1, 1, 0, 0, 1, 1])
+                #training = training + (dummy_tensor,)
+                print("FFFFFFFFFFF")
+                print("FFFFFFFFFFF")
+                print("FFFFFFFFFFF")
+                print(training.get_sessions())
+                print("FFFFFFFFFFF")
+                print("FFFFFFFFFFF")
+                print("FFFFFFFFFFF")
 
                 if args.model == utils.MODEL_CHOICES[0]:
-                    model = BENDRClassification.from_dataset(training, multi_gpu=args.multi_gpu)
+                    model = BENDRClassification.from_dataset(training)
                 else:
                     model = LinearHeadBENDR.from_dataset(training)
-
                 if not args.random_init:
                     model.load_pretrained_modules(experiment.encoder_weights, experiment.context_weights,
                                                   freeze_encoder=args.freeze_encoder)

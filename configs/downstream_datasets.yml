@@ -1,6 +1,6 @@
 mmidb:
   name: "Physionet MMIDB"
-  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/files"
+  toplevel: "C:\\Users\\chedl\\OneDrive\\Bureau\\EMSE\\3A\\PE\\files"
   tmin: 0
   tlen: 6
   data_max: 0.001
@@ -21,14 +21,16 @@ mmidb:
     batch_size: 4 # I find this dataset likes small batch sizes
   lr: 0.00001
   folds: 5
-  #toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/study5"
 
 mahnob_eeg:
   name: "EEG MAHNOB"
-  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/mahnob_eeg"
-  tlen: 6
+  toplevel: "C:\\Users\\chedl\\OneDrive\\Bureau\\EMSE\\3A\\PE\\test"
+  tlen: 120
+  #tmin: 0
+  #targets: 79
   events:
-    - 1
+    'valence_0': 0
+    'valence_1': 1
   train_params:
     epochs: 3
     batch_size: 60
@@ -50,7 +52,7 @@ sleep-edf:
   name: "Sleep EDFx Cassette"
   filename_format: "SC4{subject:2}{session:1}"
   annotation_format: "SC4{subject:2}{session:1}*Hypnogram*"
-  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/SSC/sleep-cassette"
+  toplevel: "C:\\Users\\chedl\\OneDrive\\Bureau\\EMSE\\3A\\PE\\SSC\\sleep-cassette"
   tmin: 0
   tlen: 30
   data_max: 0.001
@@ -87,7 +89,7 @@ sleep-edf:
 erpbci:
   data_max: 0.00631
   data_min: -0.00283
-  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/erp"
+  toplevel: "C:\\Users\\chedl\\OneDrive\\Bureau\\EMSE\\3A\\PE\\erp"
   tmin: -0.1
   tlen: 0.7
   # We low-passed offline using this parameter just so it didn't happen over and over.

@@ -3,8 +3,8 @@
 mkdir -p results
 
 # Train LO/MSO from scratch
-#python3 downstream.py linear --random-init --results-filename "results/linear_random_init.xls"
-python3 downstream.py BENDR --random-init --results-filename "results/BENDR_random_init.xls"
+#python downstream.py linear --random-init --results-filename "results/linear_random_init.xls"
+python downstream.py BENDR --random-init --results-filename "results/BENDR_random_init.xls"
 
 # Train LO/MSO from checkpoint
 #python3 downstream.py linear --results-filename "results/linear.xlsx"
