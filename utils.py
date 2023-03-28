@@ -50,17 +50,8 @@ def get_ds_added_metrics(ds_name, metrics_config):
 
 def get_ds(name, ds):
     if name in CUSTOM_LOADERS:
-        print("JE RENTRE")
         ds.add_custom_raw_loader(CUSTOM_LOADERS[name]())
-    print("LLLLLLLLLLLLLL")
-    print("LLLLLLLLLLLLLL")
-    print("LLLLLLLLLLLLLL")
-    print(ds)
-    print("LLLLLLLLLLLLLL")
-    print("LLLLLLLLLLLLLL")
-    print("LLLLLLLLLLLLLL")
     dataset = ds.auto_construct_dataset()
-    print("JE SUIS PASSEEEEEE")
     dataset.add_transform(To1020())
     print(dataset)
     return dataset

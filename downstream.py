@@ -46,22 +46,11 @@ if __name__ == '__main__':
         for ds_name, ds in tqdm.tqdm(experiment.datasets.items(), total=len(experiment.datasets.items()),
                                      desc='Datasets'):
             added_metrics, retain_best, _ = utils.get_ds_added_metrics(ds_name, args.metrics_config)
-            # print('yy')
-            print(ds_name)
-            print(ds)
-            #dataset = utils.get_ds(ds_name, ds)
-            print('tt')
             for fold, (training, validation, test) in enumerate(tqdm.tqdm(utils.get_lmoso_iterator(ds_name, ds))):
                 #tqdm.tqdm.write(torch.cuda.memory_summary())
                 #dummy_tensor = torch.tensor([1, 0, 1, 1, 0, 0, 1, 1])
                 #training = training + (dummy_tensor,)
-                print("FFFFFFFFFFF")
-                print("FFFFFFFFFFF")
-                print("FFFFFFFFFFF")
                 print(training.get_sessions())
-                print("FFFFFFFFFFF")
-                print("FFFFFFFFFFF")
-                print("FFFFFFFFFFF")
 
                 if args.model == utils.MODEL_CHOICES[0]:
                     model = BENDRClassification.from_dataset(training)

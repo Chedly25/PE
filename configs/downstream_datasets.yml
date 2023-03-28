@@ -36,18 +36,6 @@ mahnob_eeg:
     batch_size: 60
   lr: 0.00005
 
-bouli:
-  name: "bibou"
-  toplevel: "/mnt/c/Users/chedl/OneDrive/Bureau/EMSE/3A/PE/test"
-  tmin: -2
-  tlen: 6
-  extensions:
-    - .edf
-  train_params:
-    epochs: 3
-    batch_size: 60
-    lr: 0.00005
-
 sleep-edf:
   name: "Sleep EDFx Cassette"
   filename_format: "SC4{subject:2}{session:1}"
